@@ -1,0 +1,104 @@
+// Darray.h file
+
+#ifndef _DARRAY_H
+#define _DARRAY_H
+#include <iostream>
+using namespace std;
+
+class Darray
+{
+    int * iptr{};
+    int size{};
+    int capacity{};
+
+public:
+    Darray ();
+    void push_back(int value);
+Darray& operator=(const Darray& rhs);
+friend ostream& operator<<(ostream& os, const Darray& obj);
+~Darray();
+
+};
+
+
+#endif 
+
+// Darray.cpp
+#include <iostream>
+#include "Darray.h"
+using namespace std;
+
+Darray::Darray(){
+     iptr=nullptr;
+    size=0;
+    capacity=0;
+ }
+ Darray::~Darray(){
+    delete[] iptr;
+ }
+      void Darray::push_back(int value){
+     if (size==capacity){
+        int newCapacity;
+    
+     if (capacity==0)
+        newCapacity=1;
+     else 
+       newCapacity = capacity *2;
+       int *newArr = new int[newCapacity];
+
+        for (int i=0; i<size; i++){
+            newArr[i]=iptr[i]; 
+        }
+        delete [] iptr;
+        iptr=newArr;
+        capacity=newCapacity;
+    }
+    iptr[size]=value;
+    size++;
+ }
+ Darray& Darray::operator=(const Darray& rhs){
+    if (this!= &rhs){
+        delete[] iptr;
+    
+    size=rhs.size;
+    capacity=rhs.size; 
+ if (capacity==0)
+  iptr=nullptr;
+      else {
+             iptr = new int[capacity];
+
+             for (int i = 0; i < size; i++) {
+                iptr[i] = rhs.iptr[i];
+          }
+     }
+ }
+ return *this;
+    }
+    ostream& operator<<(ostream& os, const Darray& obj) {
+
+    for (int i = 0; i < obj.size; i++) {
+        os << obj.iptr[i] << " ";
+    }
+
+    return os;
+ }
+
+
+main.cpp
+#include <iostream>
+#include "Darray.h"
+using namespace std;
+int main(){
+Darray darr1, darr2;			//darr1 & darr2 have size 0
+    for (int j{}; j < 15; ++j){
+    	darr1.push_back(j*2);
+    }
+    cout<< darr1 <<endl;
+    darr2 = darr1;
+    for (int j{15}; j >= 0; --j){
+    	darr2.push_back(j*3);
+    }
+    cout << darr2 << endl;
+
+return 0;
+} 
