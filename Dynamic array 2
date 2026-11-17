@@ -1,0 +1,151 @@
+// Darray.h
+
+#ifndef _DARRAY_H
+#define _DARRAY_H
+#include <iostream>
+using namespace std;
+
+class Darray
+{
+    int * iptr{};
+    int newSize{};
+    int Cap{};
+
+public:
+    Darray ();
+    void push_back(int value);
+Darray& operator=(const Darray& rhs);
+int size ()const;
+int capacity()const;
+int& operator[](int val);
+friend ostream& operator<<(ostream& os, const Darray& obj);
+
+~Darray();
+
+};
+
+
+#endif 
+
+//Darray.cpp
+
+#include <iostream>
+#include "Darray.h"
+using namespace std;
+
+Darray::Darray()
+{
+    iptr = nullptr;
+    newSize = 0;
+    Cap = 0;
+}
+
+Darray::~Darray()
+{
+    delete[] iptr;
+}
+
+void Darray::push_back(int value)
+{
+    if (newSize == Cap)
+    {
+        int newCapacity;
+
+        if (Cap == 0)
+            newCapacity = 1;
+        else
+            newCapacity = Cap * 2;
+
+        int *newArr = new int[newCapacity];
+
+        for (int i = 0; i < newSize; i++)
+        {
+            newArr[i] = iptr[i];
+        }
+
+        delete[] iptr;
+
+        iptr = newArr;
+        Cap = newCapacity;
+    }
+
+    iptr[newSize] = value;
+    newSize++;
+}
+
+Darray& Darray::operator=(const Darray& rhs)
+{
+    if (this != &rhs)
+    {
+        delete[] iptr;
+
+        newSize = rhs.newSize;
+        Cap = rhs.Cap;
+
+        if (Cap == 0)
+            iptr = nullptr;
+        else
+        {
+            iptr = new int[Cap];
+
+            for (int i = 0; i < newSize; i++)
+            {
+                iptr[i] = rhs.iptr[i];
+            }
+        }
+    }
+
+    return *this;
+}
+
+ostream& operator<<(ostream& os, const Darray& obj)
+{
+    for (int i = 0; i < obj.newSize; i++)
+    {
+        os << obj.iptr[i] << " ";
+    }
+
+    return os;
+}
+
+
+
+int Darray::size() const
+{
+    return newSize;
+}
+
+int Darray::capacity() const
+{
+    return Cap;
+}
+
+int& Darray::operator[](int val)
+{
+    return iptr[val];
+}
+
+
+//main.cpp
+
+#include <iostream>
+#include "Darray.h"
+using namespace std;
+
+int main(){
+    Darray darr1;			//darr1 & darr2 have size 0
+    for (int j{}; j < 15; ++j){
+    	darr1.push_back(j*2);
+	cout << darr1.size() << '\t' << darr1.capacity() << endl;
+    }
+    cout << darr1 << endl;
+    for (int j{}; j < 15; ++j){
+    	darr1[j] +=  j;
+    }
+    cout << darr1 << endl;
+
+    return 0;
+} 
+
+
+
